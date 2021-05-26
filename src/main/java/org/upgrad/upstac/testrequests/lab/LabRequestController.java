@@ -50,12 +50,8 @@ public class LabRequestController {
     @GetMapping
     @PreAuthorize("hasAnyRole('TESTER')")
     public List<TestRequest> getForTester() {
-        try {
             User tester = userLoggedInService.getLoggedInUser();
             return testRequestQueryService.findByTester(tester);
-        } catch (Exception e) {
-            throw new AppException(e.getMessage());
-        }
     }
 
     @PreAuthorize("hasAnyRole('TESTER')")
