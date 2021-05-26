@@ -43,7 +43,7 @@ public class ConsultationController {
     @GetMapping("/in-queue")
     @PreAuthorize("hasAnyRole('DOCTOR')")
     public List<TestRequest> getForConsultations() {
-        // return the list of TestRequests which is in Completed state
+        // return the list of TestRequests which is in LAB_TEST_COMPLETED state
         return testRequestQueryService.findBy(RequestStatus.LAB_TEST_COMPLETED);
     }
 
