@@ -43,13 +43,16 @@ public class ConsultationController {
     @GetMapping("/in-queue")
     @PreAuthorize("hasAnyRole('DOCTOR')")
     public List<TestRequest> getForConsultations() {
+        // return the list of TestRequests which is in Completed state
         return testRequestQueryService.findBy(RequestStatus.LAB_TEST_COMPLETED);
     }
 
     @GetMapping
     @PreAuthorize("hasAnyRole('DOCTOR')")
     public List<TestRequest> getForDoctor() {
+        // Create User object and store the logged in doctor.
         User doctor = userLoggedInService.getLoggedInUser();
+        // return the list of TestRequests which is assigned to the logged in doctor
         return testRequestQueryService.findByDoctor(doctor);
     }
 
@@ -57,7 +60,9 @@ public class ConsultationController {
     @PutMapping("/assign/{id}")
     public TestRequest assignForConsultation(@PathVariable Long id) {
         try {
+            // Create User object and store the logged in doctor.
             User doctor = userLoggedInService.getLoggedInUser();
+            // Assign the completed test request to self
             return testRequestUpdateService.assignForConsultation(id, doctor);
         } catch (AppException e) {
             throw asBadRequest(e.getMessage());
@@ -68,7 +73,9 @@ public class ConsultationController {
     @PutMapping("/update/{id}")
     public TestRequest updateConsultation(@PathVariable Long id, @RequestBody CreateConsultationRequest testResult) {
         try {
+            // Create User object and store the logged in doctor.
             User doctor = userLoggedInService.getLoggedInUser();
+            // Update the consultation for an assigned test request.
             return testRequestUpdateService.updateConsultation(id, testResult, doctor);
         } catch (ConstraintViolationException e) {
             throw asConstraintViolation(e);
